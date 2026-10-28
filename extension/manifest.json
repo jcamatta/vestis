@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Vestis",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Right-click a product photo in any shop to add it to your local Vestis wardrobe, or a photo of an outfit to extract its items. Finds where to buy extracted items with Google Lens.",
   "permissions": ["contextMenus"],
   "host_permissions": ["<all_urls>"],

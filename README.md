@@ -6,6 +6,8 @@ Saw an outfit you like on someone? The **Extract** tab turns a photo of a dresse
 
 Generation spends your **Higgsfield subscription credits**, through a background Claude Code that writes the prompt for the chosen model. There is no prompt review: one click does everything.
 
+**Just want to use it?** Follow [INSTALL.md](INSTALL.md): one installer, one shortcut. The rest of this page is for developers.
+
 ## How it works
 
 ```
@@ -30,6 +32,8 @@ you press Try on ─────────────────────
 - **While generating**, the label under the photo shows the real step: writing the prompt, uploading, Higgsfield is generating, downloading.
 
 ## One-time setup
+
+`Install Vestis.cmd` (Windows) or `Install Vestis.command` (macOS) does all of this, plus the build and a desktop shortcut; `Start Vestis` runs the built app on port 3100. By hand:
 
 1. **Log the Claude Code CLI in.** In a terminal:
 

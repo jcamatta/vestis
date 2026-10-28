@@ -23,8 +23,10 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.action.onClicked.addListener(() => {
-  chrome.tabs.create({ url: APP });
+// The dev web server when it runs (npm run dev), otherwise the built app served by the server (Start Vestis).
+chrome.action.onClicked.addListener(async () => {
+  const devUp = await fetch(APP, { method: 'HEAD' }).then((response) => response.ok, () => false);
+  chrome.tabs.create({ url: devUp ? APP : SERVER });
 });
 
 /** Sends a message to one frame of a tab; resolves undefined when nothing answers. */
@@ -82,7 +84,7 @@ const send = async (input) => {
     if (!response.ok) throw new Error(body.error || `${response.status}`);
     await toast({ tabId: tab.id, text: words.done(body), kind: 'ok' });
   } catch (error) {
-    const reason = error instanceof TypeError ? 'The Vestis server is not running (npm run dev in vestis/).' : String(error.message || error);
+    const reason = error instanceof TypeError ? 'Vestis is not running: open Start Vestis (or npm run dev in the vestis folder).' : String(error.message || error);
     await toast({ tabId: tab.id, text: `${words.failed}: ${reason}`, kind: 'error' });
   }
 };

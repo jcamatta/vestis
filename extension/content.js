@@ -1,6 +1,6 @@
 // Vestis extension — content script.
 // Remembers where the user right-clicked, finds the best product image there, and shows small toasts.
-// On the try-on app it passes "find where to buy" requests to the worker; on a Google Lens results page it reads the products.
+// On the Vestis app it passes "find where to buy" requests to the worker; on a Google Lens results page it reads the products.
 
 (() => {
   if (window.__vestisLoaded) return;
@@ -115,7 +115,7 @@
     showToast.timer = setTimeout(() => box.remove(), input.kind === 'info' ? 8000 : 5000);
   };
 
-  /** The try-on web app (dev server or served by the local server). */
+  /** The Vestis web app (dev server or served by the local server). */
   const APP_ORIGINS = ['http://127.0.0.1:5174', 'http://localhost:5174', 'http://127.0.0.1:3100', 'http://localhost:3100'];
 
   if (window.top === window && APP_ORIGINS.includes(location.origin)) {
