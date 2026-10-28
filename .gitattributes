@@ -1,2 +1,4 @@
 *.cmd text eol=crlf
 *.mjs text eol=lf
+*.png binary
+*.ico binary

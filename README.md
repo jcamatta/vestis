@@ -1,3 +1,5 @@
+<img src="scripts/vestis.png" width="96" alt="Vestis icon">
+
 # Vestis
 
 Save clothes from any online shop with a right-click, then see them on photos of yourself. Pick a photo, one item per section, a model, press **Try on**, and the result appears next to your original with a before/after slider.
@@ -6,7 +8,88 @@ Saw an outfit you like on someone? The **Extract** tab turns a photo of a dresse
 
 Generation spends your **Higgsfield subscription credits**, through a background Claude Code that writes the prompt for the chosen model. There is no prompt review: one click does everything.
 
-**Just want to use it?** Follow [INSTALL.md](INSTALL.md): one installer, one shortcut. The rest of this page is for developers.
+## Install (Windows and macOS)
+
+Vestis runs on your own computer: a small local server, a Chrome window and a Chrome extension. Setup takes about 15 minutes, once.
+
+### What you need
+
+- **Google Chrome.**
+- A **Claude** account with a **Pro or Max** plan ([claude.ai](https://claude.ai)). Claude writes the image prompts in the background.
+- A **Higgsfield** account with credits ([higgsfield.ai](https://higgsfield.ai)). Every try-on spends Higgsfield credits.
+
+### 1. Install Node.js and Git (once)
+
+| | macOS | Windows |
+|---|---|---|
+| **Node.js 22 or newer** | [nodejs.org](https://nodejs.org) → the **LTS** installer | [nodejs.org](https://nodejs.org) → the **LTS** installer |
+| **Git** | Nothing to download: step 2 offers to install it | [git-scm.com/download/win](https://git-scm.com/download/win) → keep every default |
+
+### 2. Download Vestis
+
+Open a terminal (macOS: Cmd + Space, type **Terminal** · Windows: Windows key, type **PowerShell**) and run these, one at a time. The first downloads Vestis into your home folder; on a Mac it may first offer to install Git: accept, wait, then run it again.
+
+```bash
+git clone https://github.com/jcamatta/vestis.git
+```
+
+```bash
+cd vestis
+```
+
+Keep the `vestis` folder where it is: the desktop icon points to it.
+
+### 3. Run the setup
+
+```bash
+npm run setup
+```
+
+It goes through 6 steps and stops when you need to do something:
+
+| Step | What you do |
+|---|---|
+| 3 · Sign in to Claude | A browser page opens: sign in to Claude and approve. |
+| 4 · Higgsfield | Press Enter. Claude opens in the terminal: type `/mcp` and press Enter, pick **higgsfield** → **Authenticate**, sign in to Higgsfield in the browser and approve. Back in the terminal, press Esc, type `/exit` and press Enter. |
+
+Everything else is automatic: it installs Claude Code if it is missing, installs and builds Vestis, and creates the **Vestis** icon:
+
+- **Windows:** on the Desktop and in the Start menu.
+- **macOS:** `Vestis.app` in the `Applications` folder of your home folder (so it shows up in Spotlight and Launchpad) and a link on the Desktop. Drag it to the Dock if you like.
+
+If a step fails, run `npm run setup` again: it skips what is already done.
+
+### 4. Add the Chrome extension
+
+1. In Chrome, open `chrome://extensions`.
+2. Turn on **Developer mode** (top right).
+3. Click **Load unpacked** and pick the `extension` folder inside `vestis` (the setup opened it and printed its path).
+4. Click the puzzle icon in Chrome's toolbar and pin **Vestis**.
+
+### 5. Open it
+
+Double-click the **Vestis** icon. Each time it gets the latest version from GitHub (offline, it uses the one you have), builds it (the first time takes a minute, later a few seconds), starts Vestis in the background and opens it in its own Chrome window. On Windows a minimized window shows the progress; on macOS a notification.
+
+Closing the window doesn't stop Vestis, so opening it again is instant and you can keep adding items from shops. Restarting the computer stops it, or run `npm run stop` in the `vestis` folder. With Vestis running, the Vestis button in Chrome's toolbar also opens it.
+
+Each **Try on** and each **Extract** uses Higgsfield credits. Adding photos and items doesn't.
+
+### Troubleshooting
+
+| Problem | Fix |
+|---|---|
+| A black bar at the top of Vestis | It says what is wrong: Claude signed out, or Higgsfield not connected or not answering. Try on and Extract stay off until it is fixed. Usually: run `npm run setup` again in the `vestis` folder, then press **Check again**. Vestis also checks every few minutes and after any failed run. |
+| "Vestis is not running" when you right-click in a shop | Open Vestis with its icon. |
+| A look shows an error under the photo | It says what failed, for example no Higgsfield credits left. Fix that and press **Try on** again. |
+| "Blocked by Higgsfield's safety filter" | FLUX 3 blocks some brands (Nike, Jordan). Pick GPT Image 2.5 at the top left and try again. |
+| The icon does nothing | macOS: open `data/logs/launch.log` in the `vestis` folder. Windows: the minimized window in the taskbar shows the error. Vestis itself logs to `data/logs/server.log`. |
+| The icon stopped working after moving the folder, or after installing Node again | Run `npm run shortcut` in the `vestis` folder. |
+| "Could not update from GitHub" | You are offline; Vestis opens with the version you have. |
+| `node`, `npm` or `git` "not recognized" / "command not found" | Install it (step 1), then open a **new** terminal. In a new terminal, `cd vestis` first. |
+
+### Where your things are
+
+Your photos, items and looks stay on your computer, in the `data` folder inside `vestis`: `wardrobe.json` lists them, `media/` holds the images (`people`, `garments`, `looks`, plus `canvases`, `outfits` and `extractions` used while working). Updates never touch `data`, and it never goes to GitHub. Higgsfield also keeps a copy of each upload and result in your Higgsfield library.
 
 ## How it works
 
@@ -32,59 +115,7 @@ you press Try on ─────────────────────
 - **While generating**, the label under the photo shows the real step: writing the prompt, uploading, Higgsfield is generating, downloading.
 - **Setup check:** the server checks `claude auth status` and `claude mcp get higgsfield` at start, every five minutes, and after any failed Claude run. When something is wrong, a bar under the header says what and how to fix it (Check again re-runs it), and Try on and Extract are off. `GET /api/setup` reads the last check, `POST /api/setup/check` checks now.
 
-## One-time setup
-
-`npm run setup` does all of this on Windows and macOS (Claude Code install, sign-in, Higgsfield, dependencies, build) and creates the **Vestis** desktop icon; see [INSTALL.md](INSTALL.md). By hand:
-
-1. **Log the Claude Code CLI in.** In a terminal:
-
-   ```bash
-   claude
-   ```
-
-   Then type `/login`, finish in the browser, and quit with `/exit`.
-
-2. **Add Higgsfield to the CLI** under the name `higgsfield`:
-
-   ```bash
-   claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp
-   ```
-
-   Then run `claude`, type `/mcp`, pick `higgsfield`, choose **Authenticate**, and approve in the browser. Quit with `/exit`.
-
-3. **Install the dependencies:**
-
-   ```bash
-   npm install
-   ```
-
-   ```bash
-   npm --prefix server install
-   ```
-
-   ```bash
-   npm --prefix web install
-   ```
-
-4. **Install the extension** in Chrome:
-   - Open `chrome://extensions`.
-   - Turn on **Developer mode** (top right).
-   - Click **Load unpacked** and pick the folder `extension`.
-   - After any change to the extension, click its reload arrow there, then reload the shop tabs.
-
-## Every time
-
-The desktop icon (`npm run app`, `scripts/launch.mjs`) pulls from GitHub, installs what changed, builds, (re)starts the server in the background on port 3100 (not while a job runs) and opens it in a Chrome app window. `npm run stop` stops it; logs are in `data/logs/`. `npm run shortcut` recreates the icon.
-
-For development, with hot reload:
-
-```bash
-npm run dev
-```
-
-Open http://127.0.0.1:5174, or click the extension's icon.
-
-## Use
+## Use in detail
 
 1. **Add a photo of yourself**: the `+` at the top left of the stage, or drop the photo on the stage. JPEG, PNG, WebP or AVIF. Claude reads it (about 20 s) and decides which sections it can show.
 2. **In a shop**, right-click the product photo → **Add to Vestis** → pick the section, or let Claude decide. A toast confirms it, and the item appears in the app with a name and description written by Claude. A photo of the product alone works best; a photo of a model wearing it also works.
@@ -101,9 +132,23 @@ Good to know:
 - Looks and extractions share one queue: one Higgsfield job at a time.
 - Deleting a look that is still waiting cancels it. One already generating finishes on Higgsfield (credits spent); only the result is discarded.
 
-## Where things are stored
+## Development
 
-`data/wardrobe.json` holds the list of photos, items and looks. The images are in `data/media/` (`people`, `garments`, `canvases`, `looks`, `outfits`, `extractions`). Both are gitignored. Higgsfield also keeps a copy of each upload and result in your Higgsfield library.
+```bash
+npm run dev
+```
+
+Open http://127.0.0.1:5174 (hot reload), or click the extension's button: it opens the dev server when it runs, else the built app on 3100. After any change to the extension, click its reload arrow in `chrome://extensions`, then reload the shop tabs.
+
+| Command | What |
+|---|---|
+| `npm run setup` | One-time setup: Claude Code, sign-in, Higgsfield, install, build, icon |
+| `npm run app` | What the icon does: `git pull`, install what changed, build, (re)start the server in the background on 3100 (not while a job runs), open a Chrome app window |
+| `npm run stop` | Stop the background server |
+| `npm run shortcut` | Recreate the icon for this folder (`scripts/vestis.png` / `.ico`, drawn from `scripts/vestis.svg`) |
+| `npm run dev` | Server (`tsx watch`) + Vite, with hot reload |
+
+By hand, the setup is: `claude` → `/login`; `claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp`, then `claude` → `/mcp` → higgsfield → Authenticate; `npm install` in the root, `server/` and `web/`.
 
 ## Tech
 
@@ -124,6 +169,7 @@ Functional style: data types, pure functions and side effects live in separate f
 ```
 vestis/
 ├── extension/            background.js (right-click menus Add to Vestis / Extract outfit, fetches the image, posts it; opens the Lens tabs) · content.js (finds the image under the pointer; passes the app's Lens request on; reads Lens results) · lens.html/lens.js (sends a cut-out to Google Lens)
+├── scripts/            setup.mjs (npm run setup) · launch.mjs (the icon: update, build, start, open; --stop) · create-shortcut.mjs · common.mjs · vestis.svg/png/ico
 ├── skills/               one prompt skill per model: flux_3_image.md · gpt_image_2_5.md · ideogram_4_5.md · extract_gpt_image_2_5.md (Extract)
 ├── server/src/
 │   ├── data/             types and constants: slots, models (models.ts), wardrobe, zod schemas

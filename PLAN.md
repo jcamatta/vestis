@@ -134,7 +134,7 @@ For people who did not set Vestis up themselves: the app says when Claude or Hig
 
 - Server: `claude auth status` (JSON `loggedIn`) and `claude mcp get <name from VESTIS_HF_TOOLS_PREFIX>` (its `Status:` line), run from the home folder. At start, when the last check is over five minutes old, and after any failed Claude run. `GET /api/setup`, `POST /api/setup/check`.
 - Web: polls every 30 s; a black bar under the header with the problem and **Check again**; Try on and Extract are disabled while it shows. Nothing is blocked before the first answer.
-- Plain errors: Claude Code missing or signed out → "… Run npm run setup again in the Vestis folder (see INSTALL.md), then reopen Vestis."
+- Plain errors: Claude Code missing or signed out → "… Run npm run setup again in the Vestis folder (see the README), then reopen Vestis."
 - Verified 2026-10-28: with a wrong Higgsfield name the bar shows, Check again works and Try on stays off with an item picked; with the real config there is no bar and Try on is on. Signed-out, needs-auth and failed parsing checked on sample outputs, not on a real signed-out CLI.
 
 ## Install and launch for others (built 2026-10-28)

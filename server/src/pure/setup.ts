@@ -1,6 +1,6 @@
 import type { ClaudeState, CliOutput, HiggsfieldState } from "../data/setup.js";
 
-const FIX = "Run  npm run setup  again in the Vestis folder (see INSTALL.md), then reopen Vestis.";
+const FIX = "Run  npm run setup  again in the Vestis folder (see the README), then reopen Vestis.";
 
 export const CLAUDE_MISSING = `Claude Code is not installed. ${FIX}`;
 export const CLAUDE_SIGNED_OUT = `Claude is signed out. ${FIX}`;
