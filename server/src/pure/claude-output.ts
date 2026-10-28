@@ -1,5 +1,6 @@
 import type { Result } from "../data/result.js";
 import { fail, ok } from "./result.js";
+import { CLAUDE_SIGNED_OUT } from "./setup.js";
 
 type CliOutput = { is_error?: boolean; result?: unknown; structured_output?: unknown };
 
@@ -33,7 +34,7 @@ export const parseClaudeOutput = (stdout: string): Result<unknown> => {
   if (!cli) return fail(`Claude returned no JSON: ${stdout.slice(0, 300)}`);
   if (cli.structured_output !== undefined && cli.structured_output !== null) return ok(cli.structured_output);
   const text = typeof cli.result === "string" ? cli.result : "";
-  if (cli.is_error && /authenticat|log ?in/i.test(text)) return fail("Claude Code is not logged in: open a terminal, run claude, then /login.");
+  if (cli.is_error && /authenticat|log ?in/i.test(text)) return fail(CLAUDE_SIGNED_OUT);
   if (cli.is_error) return fail(`Claude Code failed: ${text.slice(0, 300)}`);
   const parsed = firstJsonObject(text);
   return parsed === undefined ? fail(`Claude gave no structured answer: ${text.slice(0, 300)}`) : ok(parsed);

@@ -1,4 +1,5 @@
 import type { Extraction, LensItem, LookItem, Look, ModelOption, Person, Wardrobe } from '../data/wardrobe';
+import type { Setup } from '../data/setup';
 import type { Slot } from '../data/slot';
 
 const errorOf = async (response: Response): Promise<string> => {
@@ -89,3 +90,11 @@ export type MoveGarmentInput = { id: string; slot: Slot };
 export const moveGarment = async (input: MoveGarmentInput): Promise<void> => {
   await request({ path: `/api/garments/${input.id}`, method: 'PATCH', body: JSON.stringify({ slot: input.slot }), contentType: 'application/json' });
 };
+
+/** The server's last check of Claude and Higgsfield (redone there after five minutes). */
+export const fetchSetup = async (signal: AbortSignal): Promise<Setup> =>
+  (await (await request({ path: '/api/setup', signal })).json()) as Setup;
+
+/** Checks Claude and Higgsfield now. */
+export const checkSetup = async (): Promise<Setup> =>
+  (await (await request({ path: '/api/setup/check', method: 'POST' })).json()) as Setup;

@@ -39,7 +39,8 @@ export type TryOnState = {
   move: (input: MoveGarmentInput) => void;
 };
 
-export type UseTryOnInput = { wardrobe: Wardrobe | undefined; models: ModelOption[] };
+/** `ready`: Claude and Higgsfield can run (see use-setup). */
+export type UseTryOnInput = { wardrobe: Wardrobe | undefined; models: ModelOption[]; ready: boolean };
 
 const errorText = (error: unknown): string => (error instanceof Error ? error.message : String(error));
 
@@ -65,7 +66,7 @@ export const useTryOn = (input: UseTryOnInput): TryOnState => {
     return garmentId ? [{ slot, garmentId, fit: fits[slot] ?? null }] : [];
   });
   const alreadyRunning = person !== undefined && sameLookRunning({ looks: input.wardrobe?.looks ?? [], personId: person.id, model: modelId, items });
-  const canTryOn = !busy && !alreadyRunning && person?.status === 'ready' && modelId !== '' && items.length > 0;
+  const canTryOn = input.ready && !busy && !alreadyRunning && person?.status === 'ready' && modelId !== '' && items.length > 0;
 
   const run = (task: () => Promise<void>): void => {
     setError(null);

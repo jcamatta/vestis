@@ -1,6 +1,7 @@
 import type { JSX } from 'react';
 import { Tabs } from '@base-ui/react/tabs';
 import { ModelSelect } from '../components/model-select';
+import { SetupBanner } from '../components/setup-banner';
 import { ViewTabs } from '../components/view-tabs';
 import type { AppController } from '../controllers/use-app-controller';
 import type { ViewTab } from '../data/selection';
@@ -25,6 +26,7 @@ export const AppView = (props: AppController): JSX.Element => {
         </div>
         <ViewTabs lookCount={props.looks.looks.length} outfitCount={props.extract.extractions.length} />
       </header>
+      {props.setup.problem && <SetupBanner problem={props.setup.problem} checking={props.setup.checking} onCheck={props.setup.recheck} />}
       <Tabs.Panel value="tryon" className="min-h-0 flex-1">
         <TryOnView {...props.tryOn} />
       </Tabs.Panel>

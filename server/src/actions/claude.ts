@@ -4,13 +4,11 @@ import type { Result } from "../data/result.js";
 import { parseClaudeOutput } from "../pure/claude-output.js";
 import { toolUses } from "../pure/claude-stream.js";
 import { fail } from "../pure/result.js";
+import { CLAUDE_MISSING } from "../pure/setup.js";
+import { BIN, childEnv } from "./claude-cli.js";
+import { recheckSetup } from "./setup.js";
 
-const BIN = process.env.VESTIS_CLAUDE_BIN ?? "claude";
 const MODEL = process.env.VESTIS_CLAUDE_MODEL ?? "sonnet";
-
-/** A child started from inside a Claude Code session would otherwise think it is nested. */
-const childEnv = (): NodeJS.ProcessEnv =>
-  Object.fromEntries(Object.entries(process.env).filter(([key]: [string, string | undefined]): boolean => key !== "CLAUDECODE" && !key.startsWith("CLAUDE_CODE_")));
 
 const args = (run: ClaudeRun): string[] => [
   "-p",
@@ -27,7 +25,7 @@ const args = (run: ClaudeRun): string[] => [
 export type RunClaudeInput = { run: ClaudeRun; cwd: string; onTool?: (tool: string) => void };
 
 /** Runs headless Claude Code with the task on stdin, reports each tool it calls, and returns its structured answer. */
-export const runClaude = (input: RunClaudeInput): Promise<Result<unknown>> =>
+const run = (input: RunClaudeInput): Promise<Result<unknown>> =>
   new Promise((resolve: (result: Result<unknown>) => void): void => {
     const child = spawn(BIN, args(input.run), { cwd: input.cwd, env: childEnv(), windowsHide: true });
     let stdout = "";
@@ -49,7 +47,7 @@ export const runClaude = (input: RunClaudeInput): Promise<Result<unknown>> =>
     });
     child.on("error", (error: Error): void => {
       clearTimeout(timer);
-      resolve(fail(`Could not start Claude Code (${BIN}): ${error.message}`));
+      resolve(fail((error as NodeJS.ErrnoException).code === "ENOENT" ? CLAUDE_MISSING : `Could not start Claude Code (${BIN}): ${error.message}`));
     });
     child.on("close", (code: number | null): void => {
       clearTimeout(timer);
@@ -58,3 +56,10 @@ export const runClaude = (input: RunClaudeInput): Promise<Result<unknown>> =>
     });
     child.stdin.end(input.run.prompt, "utf8");
   });
+
+/** Same, and after a failed run checks Claude and Higgsfield again, so the app's banner says what to fix. */
+export const runClaude = async (input: RunClaudeInput): Promise<Result<unknown>> => {
+  const result = await run(input);
+  if (!result.ok) void recheckSetup();
+  return result;
+};

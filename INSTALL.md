@@ -47,8 +47,9 @@ Each **Try on** and each **Extract** uses Higgsfield credits. Adding items and p
 
 ## When something goes wrong
 
+- **A black bar at the top** says what is wrong: Claude is signed out, or Higgsfield is not connected or not answering. **Try on** and **Extract** stay off until it is fixed. Do what the bar says (usually: close the Vestis window, run **Install Vestis** again, start Vestis), then press **Check again**. Vestis checks on its own every few minutes and after any failed run.
 - **"Vestis is not running"** when you right-click in a shop: open Vestis first (step 3).
-- **Nothing happens after Try on**, or it says Higgsfield failed: open the installer again; it checks the Claude sign-in and the Higgsfield connection, and walks you through fixing them.
+- **A look shows an error** under the photo: it says what failed (for example no Higgsfield credits left). Fix that and press **Try on** again.
 - **"Blocked by Higgsfield's safety filter":** some brands (Nike, Jordan) are blocked with FLUX 3. Pick GPT Image 2.5 at the top left and try again.
 
 ## Updating

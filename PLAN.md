@@ -128,6 +128,15 @@ Find where to buy (Extract tab) → the web page asks the extension (window.post
 
 GPT Image 2.5 becomes the default model in Try on: move it first in `MODELS` (`server/src/data/models.ts`); the web app already defaults to the first model. The select keeps all three.
 
+## Setup check (built 2026-10-28)
+
+For people who did not set Vestis up themselves: the app says when Claude or Higgsfield is not ready, and how to fix it, instead of failing on the first Try on.
+
+- Server: `claude auth status` (JSON `loggedIn`) and `claude mcp get <name from VESTIS_HF_TOOLS_PREFIX>` (its `Status:` line), run from the home folder. At start, when the last check is over five minutes old, and after any failed Claude run. `GET /api/setup`, `POST /api/setup/check`.
+- Web: polls every 30 s; a black bar under the header with the problem and **Check again**; Try on and Extract are disabled while it shows. Nothing is blocked before the first answer.
+- Plain errors: Claude Code missing or signed out → "… Close Vestis, run Install Vestis again, then start Vestis."
+- Verified 2026-10-28: with a wrong Higgsfield name the bar shows, Check again works and Try on stays off with an item picked; with the real config there is no bar and Try on is on. Signed-out, needs-auth and failed parsing checked on sample outputs, not on a real signed-out CLI.
+
 ## Status
 
 - [x] 1 — scaffold, server, web, extension, skills (main session, 2026-10-01)

@@ -30,6 +30,7 @@ you press Try on ─────────────────────
 - **Sections:** Head (hats), Glasses, Tops, Pants, Shoes. One item per section per look, up to 5. When a photo is added, Claude decides which sections it can show: no feet visible → no Shoes.
 - **Models** (pick at the top left): GPT Image 2.5 (default), FLUX 3, Ideogram 4.5. Each has its own prompt skill in `skills/`. Every look shows which model made it.
 - **While generating**, the label under the photo shows the real step: writing the prompt, uploading, Higgsfield is generating, downloading.
+- **Setup check:** the server checks `claude auth status` and `claude mcp get higgsfield` at start, every five minutes, and after any failed Claude run. When something is wrong, a bar under the header says what and how to fix it (Check again re-runs it), and Try on and Extract are off. `GET /api/setup` reads the last check, `POST /api/setup/check` checks now.
 
 ## One-time setup
 

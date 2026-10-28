@@ -32,7 +32,8 @@ export type ExtractState = {
   searchItem: (index: number) => void;
 };
 
-export type UseExtractInput = { wardrobe: Wardrobe | undefined; models: ModelOption[]; onTryOn: (garments: Garment[]) => void };
+/** `ready`: Claude and Higgsfield can run (see use-setup). */
+export type UseExtractInput = { wardrobe: Wardrobe | undefined; models: ModelOption[]; ready: boolean; onTryOn: (garments: Garment[]) => void };
 
 const errorText = (error: unknown): string => (error instanceof Error ? error.message : String(error));
 
@@ -46,7 +47,7 @@ export const useExtract = (input: UseExtractInput): ExtractState => {
   const extraction = findById({ list: extractions, id }) ?? extractions[0];
   const extracted = extraction ? extractedGarments({ extraction, garments }) : [];
   const canSearch = extraction !== undefined && canSearchAll(extraction);
-  const canExtract = !busy && extraction !== undefined && itemsEditable(extraction) && selectedCount(extraction) > 0 && !extractionRunning(extraction);
+  const canExtract = input.ready && !busy && extraction !== undefined && itemsEditable(extraction) && selectedCount(extraction) > 0 && !extractionRunning(extraction);
 
   const run = (task: () => Promise<void>): void => {
     setError(null);
