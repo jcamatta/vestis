@@ -137,6 +137,16 @@ For people who did not set Vestis up themselves: the app says when Claude or Hig
 - Plain errors: Claude Code missing or signed out → "… Run npm run setup again in the Vestis folder (see INSTALL.md), then reopen Vestis."
 - Verified 2026-10-28: with a wrong Higgsfield name the bar shows, Check again works and Try on stays off with an item picked; with the real config there is no bar and Try on is on. Signed-out, needs-auth and failed parsing checked on sample outputs, not on a real signed-out CLI.
 
+## Install and launch for others (built 2026-10-28)
+
+Same pattern as Inspiratio (`D:/code/inspiratio/scripts`): Node scripts, identical on Windows and macOS.
+
+- `npm run setup` (`scripts/setup.mjs`): Node ≥ 22 check, installs Claude Code if missing, `claude auth login`, adds Higgsfield and walks through `/mcp` → Authenticate, installs, builds, creates the icon, shows the extension folder.
+- Desktop icon (`scripts/launch.mjs`, also `npm run app`): `git pull --ff-only`, install when a lock changed, build, start the server detached on 3100 (restart only when no job runs), open a Chrome `--app` window (Chrome only: the extension must be on the page). `npm run stop`. Logs and pid in `data/`.
+- `scripts/create-shortcut.mjs`: `.lnk` on the Desktop and Start menu (Windows); `~/Applications/Vestis.app` + Desktop link (macOS). The `.app` is built on her Mac, so Gatekeeper does not block it, unlike a downloaded `.command`.
+- Replaced the earlier `Install Vestis` / `Start Vestis` `.cmd` / `.command` / `.ps1` scripts.
+- Verified on Windows 2026-10-28 from a fresh clone: setup ran through (already signed in), icon created, launch opened the "Vestis" Chrome app window, a second launch restarted the server, `npm run stop` stopped it. Not run on a Mac.
+
 ## Status
 
 - [x] 1 — scaffold, server, web, extension, skills (main session, 2026-10-01)
