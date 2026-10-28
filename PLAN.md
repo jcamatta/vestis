@@ -25,7 +25,7 @@ app (localhost)
 
 ## Decisions (fixed)
 
-- **Folder:** `D:/code/vestis`, its own git repo at github.com/jcamatta/vestis (private; moved out of `filmmaking/` as `tryon/` and renamed 2026-10-28). No commits — the user commits. npm, **no tests**.
+- **Folder:** `D:/code/vestis`, its own git repo at github.com/jcamatta/vestis (public since 2026-10-28; moved out of `filmmaking/` as `tryon/` and renamed 2026-10-28). No commits — the user commits. npm, **no tests**.
 - **Packages:** `server/` (Node + TS + Express + sharp), `web/` (Vite + React + TS + Tailwind 4 + Base UI), `extension/` (Chrome MV3, plain JS, no build), root `package.json` scripts only.
 - **Ports:** server `3100`, Vite dev `5174` proxying `/api`. Bound to `127.0.0.1`.
 - **Data:** `data/wardrobe.json` (index) + `data/media/{people,garments,canvases,looks,outfits,extractions}/` (files). Only the server writes. Both are **gitignored** (photos of the user).
