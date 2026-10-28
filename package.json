@@ -4,7 +4,11 @@
   "scripts": {
     "dev": "concurrently -n server,web \"npm --prefix server run dev\" \"npm --prefix web run dev\"",
     "build": "npm --prefix web run build && npm --prefix server run build",
-    "start": "npm run build && npm --prefix server run start"
+    "start": "npm run build && npm --prefix server run start",
+    "setup": "node scripts/setup.mjs",
+    "app": "node scripts/launch.mjs",
+    "stop": "node scripts/launch.mjs --stop",
+    "shortcut": "node scripts/create-shortcut.mjs"
   },
   "devDependencies": {
     "concurrently": "^10.0.5"

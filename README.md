@@ -34,7 +34,7 @@ you press Try on ─────────────────────
 
 ## One-time setup
 
-`Install Vestis.cmd` (Windows) or `Install Vestis.command` (macOS) does all of this, plus the build and a desktop shortcut; `Start Vestis` runs the built app on port 3100. By hand:
+`npm run setup` does all of this on Windows and macOS (Claude Code install, sign-in, Higgsfield, dependencies, build) and creates the **Vestis** desktop icon; see [INSTALL.md](INSTALL.md). By hand:
 
 1. **Log the Claude Code CLI in.** In a terminal:
 
@@ -73,6 +73,10 @@ you press Try on ─────────────────────
    - After any change to the extension, click its reload arrow there, then reload the shop tabs.
 
 ## Every time
+
+The desktop icon (`npm run app`, `scripts/launch.mjs`) pulls from GitHub, installs what changed, builds, (re)starts the server in the background on port 3100 (not while a job runs) and opens it in a Chrome app window. `npm run stop` stops it; logs are in `data/logs/`. `npm run shortcut` recreates the icon.
+
+For development, with hot reload:
 
 ```bash
 npm run dev

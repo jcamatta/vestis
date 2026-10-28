@@ -13,7 +13,7 @@ export const AppView = (props: AppController): JSX.Element => {
   if (props.status !== 'ready') {
     return (
       <div className="flex h-full items-center justify-center text-sm text-muted">
-        {props.status === 'loading' ? 'Loading…' : 'Vestis is not running. Open Start Vestis (or npm run dev in the vestis folder).'}
+        {props.status === 'loading' ? 'Loading…' : 'Vestis is not running. Open it with the Vestis icon on your desktop.'}
       </div>
     );
   }

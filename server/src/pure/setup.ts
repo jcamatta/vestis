@@ -1,6 +1,6 @@
 import type { ClaudeState, CliOutput, HiggsfieldState } from "../data/setup.js";
 
-const FIX = "Close Vestis, run Install Vestis again, then start Vestis.";
+const FIX = "Run  npm run setup  again in the Vestis folder (see INSTALL.md), then reopen Vestis.";
 
 export const CLAUDE_MISSING = `Claude Code is not installed. ${FIX}`;
 export const CLAUDE_SIGNED_OUT = `Claude is signed out. ${FIX}`;
@@ -32,7 +32,7 @@ export const setupProblem = (input: ProblemInput): string | null => {
   if (input.claude === "signed-out") return CLAUDE_SIGNED_OUT;
   if (input.higgsfield === "missing") return `Higgsfield is not connected to Claude. ${FIX}`;
   if (input.higgsfield === "needs-auth") return `Higgsfield needs you to sign in again. ${FIX}`;
-  if (input.higgsfield === "failed") return "Higgsfield is not answering. Check the internet connection and press Check again. If it keeps failing, run Install Vestis again.";
+  if (input.higgsfield === "failed") return "Higgsfield is not answering. Check the internet connection and press Check again. If it keeps failing, run  npm run setup  again.";
   if (input.higgsfield === "unknown") return "Could not check Higgsfield. Press Check again.";
   return null;
 };
